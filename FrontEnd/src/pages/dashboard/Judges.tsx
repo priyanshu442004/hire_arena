@@ -2,7 +2,6 @@
 import Priya from "../../assets/PriyaMehta.png";
 import Rajeev from "../../assets/RajeevKhanna.png";
 import Vikram from "../../assets/VikramDesai.png";
-import vineet from "../../assets/VineetSharma.png";
 
 const judges = [
   // {
@@ -92,3 +91,4 @@ const Judges = () => {
 };
 
 export default Judges;
+
