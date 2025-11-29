@@ -3,12 +3,12 @@ import { Eye, EyeOff } from "lucide-react";
 // import image from "../assets/7675936.jpeg"
 import image from "../assets/login2.jpg"
 import { NavLink, useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import GoogleSignupButton from "../components/GoogleSignupButton";
 import LinkedinSignupButton from "../components/LinkedinSignupButton";
 
 
-const HOST = import.meta.env.VITE_BACKEND;
+
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -389,3 +389,4 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
