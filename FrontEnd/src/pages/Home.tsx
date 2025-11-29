@@ -1481,7 +1481,7 @@
 
 // export default Home;
 
-import { MessageCircle, ArrowDown, ChevronDown, ChevronUp } from "lucide-react";
+import { MessageCircle, ChevronDown, ChevronUp } from "lucide-react";
 import logo from "../assets/logo2.png";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
@@ -1489,7 +1489,7 @@ import Priya from "../assets/PriyaMehta.png";
 import Rajeev from "../assets/RajeevKhanna.png";
 import Vikram from "../assets/VikramDesai.png";
 import Faq from "../assets/AiFAQ.png";
-import { CheckCircle, Star, StarHalf } from "lucide-react";
+import { CheckCircle, Star } from "lucide-react";
 import LogoSlider from "../components/LogoSlider";
 
 type FAQItem = {
@@ -2177,3 +2177,4 @@ const Home = () => {
 };
 
 export default Home;
+
