@@ -68,7 +68,7 @@ export default function VideoCallInterfacetwo() {
   const [color, setColor] = useState<string>("#e63946"); // red strokes like screenshot
   const [strokeWidth, setStrokeWidth] = useState<number>(3);
 
-  if(!setcolor || !setStrokeWidth){}
+  if(!setColor || !setStrokeWidth){}
 
   // Shapes / Undo/Redo
   const [elements, setElements] = useState<BaseElement[]>([]);
@@ -850,4 +850,5 @@ export default function VideoCallInterfacetwo() {
   );
 
 }
+
 
