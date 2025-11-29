@@ -1,0 +1,2 @@
+VITE_BACKEND=http://localhost:3000
+VITE_GOOGLE_CLIENT_ID=251993202162-sv8v561tksqjj8sbcecub1lefbop5c62.apps.googleusercontent.com
