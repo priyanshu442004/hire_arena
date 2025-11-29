@@ -58,42 +58,7 @@ const Signup: React.FC = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const sendOtp = async () => {
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError("Please enter a valid email address");
-      return;
-    }
-    if (!accepted) {
-      setError("You must agree to the Terms & Conditions.");
-      return;
-    }
-
-    setIsLoading(true);
-    setError("");
-    setSuccess("");
-
-    try {
-      const response = await fetch(`${HOST}/api/otp/send-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        setSuccess(data.message || "OTP sent successfully!");
-        setStep(2);
-        setTimer(120);
-        setIsTimerActive(true);
-      } else {
-        setError(data.error || "Failed to send OTP.");
-      }
-    } catch (err) {
-      setError("Network error.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  
 
   const verifyOtp = async () => {
     const otpCode = otp.join('');
@@ -602,5 +567,6 @@ const Signup: React.FC = () => {
   </div>
   );
 };
+
 
 export default Signup;
