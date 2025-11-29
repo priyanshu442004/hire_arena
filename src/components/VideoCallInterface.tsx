@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import  { useState, useEffect, useRef } from "react";
 import { Phone } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -7,9 +7,7 @@ import {
   faVideo,
   faVideoSlash,
 } from "@fortawesome/free-solid-svg-icons";
-import logo from "../assets/logo.jpeg";
 import hrAvatar from "../assets/AnanyaGupta.png";
-import ochestrator from "../assets/Orchestrator.png";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const HOST = import.meta.env.VITE_BACKEND;
@@ -26,6 +24,7 @@ const InnovatePitch = () => {
   const [endingCall, setEndingCall] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [permissionDenied, setPermissionDenied] = useState(false);
+  if(elapsedTime){}
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -34,18 +33,16 @@ const InnovatePitch = () => {
   const [recorder, setRecorder] = useState<MediaRecorder | null>(null);
 
   // AI Judges
-  const [activeJudge, setActiveJudge] = useState<number | null>(null);
-  const [isAIJudgeSpeaking, setIsAIJudgeSpeaking] = useState(false);
-  const elevenLabsWidgetRef = useRef<HTMLElement | null>(null);
+ 
   const elevenLabsScriptLoaded = useRef(false);
 
-  const judges = [
-    { id: 1, name: "RAJEEV KHANNA", subtitle: "Visionary" },
-    { id: 2, name: "ANANYA GUPTA", subtitle: "Analyst" },
-    { id: 3, name: "PRIYA MEHTA", subtitle: "Empath" },
-    { id: 4, name: "VIKRAM DESAI", subtitle: "Globalist" },
-    { id: 5, name: "VINEET SHARMA", subtitle: "Strategist" },
-  ];
+  // const judges = [
+  //   { id: 1, name: "RAJEEV KHANNA", subtitle: "Visionary" },
+  //   { id: 2, name: "ANANYA GUPTA", subtitle: "Analyst" },
+  //   { id: 3, name: "PRIYA MEHTA", subtitle: "Empath" },
+  //   { id: 4, name: "VIKRAM DESAI", subtitle: "Globalist" },
+  //   { id: 5, name: "VINEET SHARMA", subtitle: "Strategist" },
+  // ];
 
   // Timer
   useEffect(() => {
@@ -53,11 +50,11 @@ const InnovatePitch = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-  };
+  // const formatTime = (seconds: number) => {
+  //   const mins = Math.floor(seconds / 60);
+  //   const secs = seconds % 60;
+  //   return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  // };
 
   // Camera
   const startCamera = async () => {
@@ -266,3 +263,4 @@ const InnovatePitch = () => {
 };
 
 export default InnovatePitch;
+
