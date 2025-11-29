@@ -10,7 +10,6 @@ import {
   Image as ImageIcon,
   RotateCw,
   CornerDownLeft,
-  UploadCloud,
   Move,
 } from "lucide-react";
 import { Maximize2, Mic, Video, MonitorPlay } from "lucide-react";
@@ -69,6 +68,8 @@ export default function VideoCallInterfacetwo() {
   const [color, setColor] = useState<string>("#e63946"); // red strokes like screenshot
   const [strokeWidth, setStrokeWidth] = useState<number>(3);
 
+  const(!setcolor || !setStrokeWidth){}
+
   // Shapes / Undo/Redo
   const [elements, setElements] = useState<BaseElement[]>([]);
   const undoStack = useRef<BaseElement[][]>([]);
@@ -115,11 +116,11 @@ export default function VideoCallInterfacetwo() {
   }, [elements, ctx]);
 
   // Save current elements state to undo stack
-  const pushToUndo = (next: BaseElement[]) => {
-    undoStack.current.push(elements.map((e) => ({ ...e })));
-    redoStack.current = []; // clear redo
-    setElements(next);
-  };
+  // const pushToUndo = (next: BaseElement[]) => {
+  //   undoStack.current.push(elements.map((e) => ({ ...e })));
+  //   redoStack.current = []; // clear redo
+  //   setElements(next);
+  // };
 
   // Undo
   const handleUndo = () => {
@@ -317,7 +318,7 @@ export default function VideoCallInterfacetwo() {
       }
     };
 
-    const onPointerUp = (ev: PointerEvent) => {
+    const onPointerUp = (_: PointerEvent) => {
       isPointerDown.current = false;
       currentEl.current = null;
       startPoint.current = null;
@@ -558,12 +559,12 @@ export default function VideoCallInterfacetwo() {
   };
 
   // remove selected
-  const removeSelected = () => {
-    if (!selectedId.current) return;
-    undoStack.current.push(elements.map((e) => ({ ...e })));
-    setElements((s) => s.filter((el) => el.id !== selectedId.current));
-    selectedId.current = null;
-  };
+  // const removeSelected = () => {
+  //   if (!selectedId.current) return;
+  //   undoStack.current.push(elements.map((e) => ({ ...e })));
+  //   setElements((s) => s.filter((el) => el.id !== selectedId.current));
+  //   selectedId.current = null;
+  // };
 
   // clear canvas
   const clearBoard = () => {
@@ -595,7 +596,7 @@ export default function VideoCallInterfacetwo() {
   }, [tool, elements]);
 
   // small utility to set color quickly (not in screenshot but handy)
-  const presetColors = ["#e63946", "#1b5f81", "#000000", "#2d2d2d"];
+  // const presetColors = ["#e63946", "#1b5f81", "#000000", "#2d2d2d"];
 
   // --- Render UI ---
   return (
@@ -847,4 +848,5 @@ export default function VideoCallInterfacetwo() {
       </footer>
     </div>
   );
+
 }
