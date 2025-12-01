@@ -1,4 +1,4 @@
-import  { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Phone } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,8 +15,16 @@ const HOST = import.meta.env.VITE_BACKEND;
 const InnovatePitch = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const pitchDeckUrl = location.state?.pitchDeckUrl || null;
+  const resumeUrl = location.state?.resumeUrl || null;
+
   const org_id = location.state?.org_id || null;
+  // --- ELEVEN LABS VOICE AGENT ---
+const elevenLabsWidgetRef = useRef<HTMLElement | null>(null);
+
+// Auto-detect when agent is speaking
+const [activeJudge, setActiveJudge] = useState<number | null>(null);
+const [isAIJudgeSpeaking, setIsAIJudgeSpeaking] = useState(false);
+
 
   // State
   const [isCameraOff, setIsCameraOff] = useState(true);
@@ -24,7 +32,6 @@ const InnovatePitch = () => {
   const [endingCall, setEndingCall] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [permissionDenied, setPermissionDenied] = useState(false);
-  if(elapsedTime){}
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -50,11 +57,11 @@ const InnovatePitch = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // const formatTime = (seconds: number) => {
-  //   const mins = Math.floor(seconds / 60);
-  //   const secs = seconds % 60;
-  //   return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-  // };
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  };
 
   // Camera
   const startCamera = async () => {
@@ -100,16 +107,84 @@ const InnovatePitch = () => {
   };
 
   // ElevenLabs AI widget
-  const loadElevenLabsScript = () => {
-    if (elevenLabsScriptLoaded.current) return;
-    const script = document.createElement("script");
-    script.src = "https://unpkg.com/@elevenlabs/convai-widget-embed";
-    script.async = true;
-    script.onload = () => {
-      elevenLabsScriptLoaded.current = true;
-    };
-    document.body.appendChild(script);
+  // ---------------- ELEVEN LABS SCRIPT LOADER ----------------
+const loadElevenLabsScript = () => {
+  const existing = document.querySelector('script[src*="elevenlabs"]');
+  if (existing || elevenLabsScriptLoaded.current) {
+    elevenLabsScriptLoaded.current = true;
+    setTimeout(triggerElevenLabsConversation, 1500);
+    return;
+  }
+
+  const script = document.createElement("script");
+  script.src = "https://unpkg.com/@elevenlabs/convai-widget-embed";
+  script.async = true;
+  script.onload = () => {
+    elevenLabsScriptLoaded.current = true;
+    setTimeout(triggerElevenLabsConversation, 1500);
   };
+
+  document.body.appendChild(script);
+};
+
+// --------------- AUTO-START THE AI JUDGE -------------------
+const triggerElevenLabsConversation = () => {
+  const widget = document.querySelector("elevenlabs-convai");
+  if (!widget) {
+    setTimeout(triggerElevenLabsConversation, 500);
+    return;
+  }
+
+  // Click the shadow-root play button
+  setTimeout(() => {
+    try {
+      const root = widget.shadowRoot;
+      if (!root) return;
+
+      const buttons = root.querySelectorAll("button");
+      if (buttons.length > 0) {
+        (buttons[0] as HTMLElement).click();
+        setActiveJudge(1);
+        setIsAIJudgeSpeaking(true);
+        return;
+      }
+    } catch (err) {
+      console.log("Shadow DOM access failed", err);
+    }
+
+    widget.dispatchEvent(new Event("click", { bubbles: true }));
+  }, 500);
+};
+
+// Monitor AI speaking (audio elements in shadow DOM)
+useEffect(() => {
+  const interval = setInterval(() => {
+    const widget = document.querySelector("elevenlabs-convai");
+    if (!widget) return;
+
+    const audios = widget.shadowRoot?.querySelectorAll("audio") || [];
+    let speaking = false;
+
+    audios.forEach(a => {
+      if (!a.paused && a.currentTime > 0) speaking = true;
+    });
+
+    if (speaking) {
+      setIsAIJudgeSpeaking(true);
+      setActiveJudge(1);
+    } else {
+      setIsAIJudgeSpeaking(false);
+      setActiveJudge(null);
+    }
+  }, 300);
+
+  return () => clearInterval(interval);
+}, []);
+
+useEffect(() => {
+  loadElevenLabsScript();
+}, []);
+
 
   useEffect(() => {
     loadElevenLabsScript();
@@ -180,23 +255,33 @@ const InnovatePitch = () => {
         <div className="flex-1 bg-white rounded-lg border border-slate-300 p-4 flex flex-col">
           <h2 className="text-2xl font-bold mb-4 text-center">Resume Viewer</h2>
           <div className="flex-1 flex items-center justify-center border-2 border-dashed border-slate-400 rounded-lg">
-            {pitchDeckUrl ? (
-              <iframe src={pitchDeckUrl} className="w-full h-full" style={{ border: "none" }} />
-            ) : (
-              <div className="text-center">
-                <img src="/pdf-icon.png" alt="PDF" className="mx-auto mb-2 w-12 h-12" />
-                <p className="font-medium">Candidate_Resume.pdf</p>
-                <p className="text-sm text-gray-500 mt-1">Uploaded Document View</p>
-              </div>
-            )}
-          </div>
+  {resumeUrl ? (
+    resumeUrl.endsWith(".pdf") ? (
+      <iframe src={resumeUrl} className="w-full h-full" style={{ border: "none" }} />
+    ) : (
+      // Word: use Google Docs Viewer
+      <iframe
+        src={`https://docs.google.com/gview?url=${resumeUrl}&embedded=true`}
+        className="w-full h-full"
+        style={{ border: "none" }}
+      />
+    )
+  ) : (
+    <div className="text-center">
+      <img src="/pdf-icon.png" alt="PDF" className="mx-auto mb-2 w-12 h-12" />
+      <p className="font-medium">Candidate_Resume</p>
+      <p className="text-sm text-gray-500 mt-1">Uploaded Document View</p>
+    </div>
+  )}
+</div>
+
         </div>
 
         {/* HR Panel */}
         <div className="w-[300px] bg-white rounded-lg border border-slate-300 flex flex-col p-4 gap-4">
           <div className="flex flex-col items-center">
             <img src={hrAvatar} alt="HR" className="w-20 h-20 rounded-full object-cover mb-2" />
-            <h3 className="font-semibold text-lg">Sarah Jenkins</h3>
+            <h3 className="font-semibold text-lg">Kavya Mehra</h3>
             <p className="text-sm text-gray-500">HR/Behavioural Interviewer</p>
           </div>
 
@@ -246,6 +331,7 @@ const InnovatePitch = () => {
 
         <button
           onClick={() => {
+            navigate("../dashboard")
             setEndingCall(true);
             stopRecording(() => {
               setEndingCall(false);
@@ -258,9 +344,27 @@ const InnovatePitch = () => {
           {endingCall ? "Ending..." : "END CALL"}
         </button>
       </footer>
+      {/* ---------------- HIDDEN ELEVEN LABS WIDGET ---------------- */}
+<div
+  ref={(el) => { elevenLabsWidgetRef.current = el }}
+  style={{
+    position: "fixed",
+    bottom: "-120px",
+    right: "10px",
+    width: "90px",
+    height: "90px",
+    opacity: 0,
+    pointerEvents: "auto",
+    zIndex: 9999,
+  }}
+>
+  {React.createElement("elevenlabs-convai", {
+    "agent-id": import.meta.env.VITE_ELEVENLABS_AGENT_ID || "agent_3201kb7f286afharsq1y791d3993"
+  })}
+</div>
+
     </div>
   );
 };
 
 export default InnovatePitch;
-

@@ -1,7 +1,11 @@
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import Signup from "./pages/SignupPage";
-import { createBrowserRouter, RouterProvider,useLocation } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  useLocation,
+} from "react-router-dom";
 import Pricing from "./pages/PricingPage";
 import Login from "./pages/LoginPage";
 import Features from "./pages/FeaturesPage";
@@ -20,21 +24,20 @@ import PrivacyPolicyPage from "./pages/PrivacyPolicy";
 import ProtectedRoute from "./components/ProtectedRoute";
 import VideoCallInterface from "./components/VideoCallInterface";
 import Analytics from "./pages/dashboard/Analytics";
-import VideoCallInterfacetwo from "./components/VideoCallInterfaceTwo"
-
+import VideoCallInterfacetwo from "./pages/dashboard/VideoCallInterfaceTwo";
 
 function DashboardWrapper() {
   const location = useLocation();
-  const hideDashboard = location.pathname.startsWith("/dashboard/videocall");
+  const isVideoCall = location.pathname.startsWith("/dashboard/videocall");
+  const isHRVideoCall = location.pathname.startsWith("/dashboard/hrvideocall");
 
-  return hideDashboard ? <VideoCallInterface /> : <DashboardLayout />;
+  if (isVideoCall) return <VideoCallInterface />;
+  if (isHRVideoCall) return <VideoCallInterfacetwo />;
+  return <DashboardLayout />;
 }
 
 export default function App() {
   const router = createBrowserRouter([
-    // THIS IS DEMO HO
-
-    // asdf
     {
       path: "/",
       element: <RootLayout />,
@@ -56,7 +59,7 @@ export default function App() {
           children: [
             {
               path: "dashboard",
-              element: <DashboardWrapper />,  
+              element: <DashboardWrapper />,
               children: [
                 { index: true, element: <DashboardHome /> },
                 { path: "pitches", element: <MyPitches /> },
@@ -65,8 +68,8 @@ export default function App() {
                 { path: "score", element: <Score /> },
                 { path: "settings", element: <Settings /> },
                 { path: "analytics", element: <Analytics /> },
-                { path: "videocall", element: <VideoCallInterface /> },
-                { path: "techincalvideocall", element: <VideoCallInterfacetwo /> },
+                { path: "videocall", element: <VideoCallInterfacetwo /> },
+                { path: "hrvideocall", element: <VideoCallInterface/>  },
               ],
             },
           ],

@@ -10,7 +10,7 @@ const RootLayout = () => {
     pathname.startsWith("/login") ||
     pathname.startsWith("/signup") ||
     pathname.startsWith("/dashboard");
-  const hideNavbar = pathname.startsWith("/dashboard/videocall");
+  const hideNavbar = pathname.startsWith("/dashboard/videocall") || pathname.startsWith("/dashboard/hrvideocall");
 
   return (
     <>

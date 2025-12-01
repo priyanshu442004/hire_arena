@@ -1,7 +1,3 @@
-// 
-
-
-
 import { NavLink } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import logo from "../assets/logo2.png";
