@@ -26,6 +26,7 @@ const [activeJudge, setActiveJudge] = useState<number | null>(null);
 const [isAIJudgeSpeaking, setIsAIJudgeSpeaking] = useState(false);
 
 
+
   // State
   const [isCameraOff, setIsCameraOff] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
@@ -40,6 +41,7 @@ const [isAIJudgeSpeaking, setIsAIJudgeSpeaking] = useState(false);
   const [recorder, setRecorder] = useState<MediaRecorder | null>(null);
 
   // AI Judges
+ 
  
   const elevenLabsScriptLoaded = useRef(false);
 
@@ -57,12 +59,13 @@ const [isAIJudgeSpeaking, setIsAIJudgeSpeaking] = useState(false);
     return () => clearInterval(timer);
   }, []);
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-  };
+  // const formatTime = (seconds: number) => {
+  //   const mins = Math.floor(seconds / 60);
+  //   const secs = seconds % 60;
+  //   return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  // };
 
+   if(!activeJudge || !isAIJudgeSpeaking || !elapsedTime){}
   // Camera
   const startCamera = async () => {
     try {

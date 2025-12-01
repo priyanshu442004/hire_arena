@@ -60,6 +60,8 @@ export default function VideoCallInterfacetwo() {
   const [color, setColor] = useState<string>("#e63946");
   const [strokeWidth, setStrokeWidth] = useState<number>(3);
 
+
+  if(!setColor || !setStrokeWidth){}
   // elements state and selection
   const [elements, setElements] = useState<BaseElement[]>([]);
   const undoStack = useRef<BaseElement[][]>([]);
@@ -165,12 +167,12 @@ useEffect(() => {
   }, [elements]);
 
   // helpers
-  const pushToUndo = (next: BaseElement[]) => {
-    undoStack.current.push(elements.map((e) => ({ ...e })));
-    if (undoStack.current.length > UNDO_LIMIT) undoStack.current.shift();
-    redoStack.current = [];
-    setElements(next);
-  };
+  // const pushToUndo = (next: BaseElement[]) => {
+  //   undoStack.current.push(elements.map((e) => ({ ...e })));
+  //   if (undoStack.current.length > UNDO_LIMIT) undoStack.current.shift();
+  //   redoStack.current = [];
+  //   setElements(next);
+  // };
 
   const handleUndo = () => {
     if (!undoStack.current.length) return;
@@ -585,12 +587,12 @@ useEffect(() => {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const removeSelected = () => {
-    if (!selectedId) return;
-    undoStack.current.push(elements.map((e) => ({ ...e })));
-    setElements((s) => s.filter((el) => el.id !== selectedId));
-    setSelectedId(null);
-  };
+  // const removeSelected = () => {
+  //   if (!selectedId) return;
+  //   undoStack.current.push(elements.map((e) => ({ ...e })));
+  //   setElements((s) => s.filter((el) => el.id !== selectedId));
+  //   setSelectedId(null);
+  // };
 
   const clearBoard = () => {
     undoStack.current.push(elements.map((e) => ({ ...e })));
@@ -621,7 +623,7 @@ useEffect(() => {
     return () => canvas.removeEventListener("pointerdown", onDown);
   }, [tool, elements, selectedId]);
 
-  const presetColors = ["#e63946", "#1b5f81", "#000000", "#2d2d2d"];
+  // const presetColors = ["#e63946", "#1b5f81", "#000000", "#2d2d2d"];
 
   return (
     <div className="w-full h-screen flex flex-col bg-[#f3f7f9]">
