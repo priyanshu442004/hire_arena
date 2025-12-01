@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Loader } from "lucide-react"; 
+import { Eye, EyeOff} from "lucide-react"; 
 import image from "../assets/login2.jpg";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -161,5 +161,6 @@ const Login: React.FC = () => {
     </div>
   );
 };
+
 
 export default Login;
